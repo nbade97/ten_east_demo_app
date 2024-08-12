@@ -2,16 +2,16 @@
 FROM node:14 AS build
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /my-vue-project
 
 # Copy the package.json and package-lock.json
-COPY package*.json /app/
+COPY package*.json /my-vue-project/
 
 # Install the dependencies
 RUN npm install
 
 # Copy the rest of the application code
-COPY . /app/
+COPY . /my-vue-project/
 
 # Build the Vue.js application
 RUN npm run build
@@ -20,10 +20,11 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy the built files from the previous stage
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /my-vue-project/dist /usr/share/nginx/html
 
 # Expose the necessary port
 EXPOSE 80
 
 # Define the command to run the web server
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve", "-s", "dist"]
