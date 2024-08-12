@@ -88,6 +88,9 @@ DATABASES = {
         'PASSWORD': 'db_password',
         'HOST': 'localhost',
         'PORT': '5432',
+        'TEST': {
+            'MIRROR': 'default',  # Use the existing database without creating a new one
+        },
     }
 }
 
@@ -149,4 +152,38 @@ WEBPACK_LOADER = {
         'BUNDLE_DIR_NAME': 'dist/',  # Directory where Vue bundles are stored
         'STATS_FILE': os.path.join(BASE_DIR, 'frontend', 'webpack-stats.json'),
     }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'auth_app': {  # Replace 'myapp' with your app name
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
 }

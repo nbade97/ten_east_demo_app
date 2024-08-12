@@ -41,7 +41,7 @@ export default {
   name: 'UserLogin',
   data() {
     return {
-      email: '',
+      username: '',
       password: ''
     };
   },
@@ -49,13 +49,15 @@ export default {
     async login() {
       try {
         const response = await axios.post('http://localhost:8000/auth/login/', {
-          email: this.email,
+          username: this.username,
           password: this.password
         });
         console.log('Login successful:', response.data);
+        alert('Login failed. Please try again.');
         // Handle successful login, e.g., redirect to another page
       } catch (error) {
         console.error('Login failed:', error);
+        alert('Login failed. Please try again.');
         // Handle login failure, e.g., show an error message
       }
     }
