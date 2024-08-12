@@ -53,7 +53,7 @@ export default {
           password: this.password
         });
         console.log('Login successful:', response.data);
-        alert('Login failed. Please try again.');
+        alert('Login success!');
         // Handle successful login, e.g., redirect to another page
       } catch (error) {
         console.error('Login failed:', error);

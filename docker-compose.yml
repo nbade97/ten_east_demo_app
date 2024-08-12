@@ -4,9 +4,9 @@ services:
   db:
     image: postgres:13
     environment:
-      POSTGRES_DB: mydatabase
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
       
@@ -14,8 +14,8 @@ services:
 
   django:
     build:
-      context: .
-      dockerfile: Dockerfile-django
+      context: ./demo_app
+      dockerfile: Dockerfile
     volumes:
       - .:/app
     ports:
@@ -27,8 +27,8 @@ services:
 
   vue:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile-vue
+      context: ./my-vue-project
+      dockerfile: Dockerfile
     ports:
       - "80:80"
 
