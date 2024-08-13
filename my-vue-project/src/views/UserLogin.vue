@@ -53,13 +53,20 @@ export default {
           password: this.password
         });
         console.log('Login successful:', response.data);
-        alert('Login success!');
-        // Handle successful login, e.g., redirect to another page
+        // alert('Login success!');
+        // this.$router.push({ name: 'InitialView' });        // Handle successful login, e.g., redirect to another page
+        this.navigateToInitialView();
+    
       } catch (error) {
         console.error('Login failed:', error);
         alert('Login failed. Please try again.');
         // Handle login failure, e.g., show an error message
       }
+    },
+    
+    navigateToInitialView() {
+      console.log('Navigating to InitialView...');
+      this.$router.push({ name: 'InitialView' });
     }
   }
 };
