@@ -12,11 +12,11 @@
           </div>
           <div class="mb-4">
             <h2 class="font-medium text-gray-900">Selected Offering</h2>
-          <p>{{ projectName }}</p>
+          <p>Project A</p>
         </div>
         <div class="mb-4">
           <h2 class="font-medium text-gray-900">Amount Requested</h2>
-          <p>{{ amount }}</p>
+          <p>100,000</p>
         </div>
       </div>
       <div class="flex justify-center mt-8">
@@ -45,6 +45,7 @@ export default {
     submitRequest() {
       // Here you would handle the form submission
       console.log("Submitting request...");
+      alert('Request submitted!');
     }
   }
 }
