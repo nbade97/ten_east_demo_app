@@ -1,3 +1,4 @@
+import datetime
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -76,3 +77,44 @@ def custom_authenticate(username, password):
         print(f"Error authenticating user: {e}")
         return None
     return None
+
+@csrf_exempt
+def add_contribution(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user = data.get('user')
+            amount = data.get('amount')
+            project_name = data.get('project_name')
+            
+            # Log the received data
+            print(f"Received data - User: {user}, Amount: {amount}, Project Name: {project_name}")
+            
+            # Connect to PostgreSQL database
+            print("Connecting to PostgreSQL database")
+            conn = psycopg2.connect(
+                dbname="postgres",
+                user="nishit",
+                host="localhost"
+            )
+            cursor = conn.cursor()
+            
+            # Insert the data into the contributions table
+            query = sql.SQL("INSERT INTO contributions (user, amount, project_name, timestamp) VALUES (%s, %s, %s, %s)")
+            cursor.execute(query, (user, amount, project_name, datetime.now()))
+            conn.commit()
+            
+            print(f"Contribution added successfully for user: {user}")
+            
+            cursor.close()
+            conn.close()
+            
+            return JsonResponse({'success': True})
+        except json.JSONDecodeError:
+            print("Invalid JSON received")
+            return JsonResponse({'success': False, 'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            print(f"Error adding contribution: {e}")
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    print("Invalid request method")
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)

@@ -95,7 +95,7 @@
     methods: {
     navigateToStepOne(projectName) {
         console.log('Navigating to StepOne with project:', projectName);
-        this.$router.push({ name: 'StepOne', params: { projectName } });
+        this.$router.push({ name: 'StepOne', query: {id: projectName} });
     }
   }
   }

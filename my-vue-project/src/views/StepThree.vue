@@ -12,11 +12,11 @@
           </div>
           <div class="mb-4">
             <h2 class="font-medium text-gray-900">Selected Offering</h2>
-          <p>Project A</p>
+          <p>{{this.$route.query.projectName}}</p>
         </div>
         <div class="mb-4">
           <h2 class="font-medium text-gray-900">Amount Requested</h2>
-          <p>100,000</p>
+          <p>{{this.$route.query.amount}}</p>
         </div>
       </div>
       <div class="flex justify-center mt-8">
@@ -31,19 +31,21 @@
 <script>
 export default {
   name: 'RequestSummary',
-  props: {
-    amount: {
-      type: String,
-      required: true
-    },
-    projectName: {
-      type: String,
-      required: true
-    }
-  },
+  // props: {
+  //   amount: {
+  //     type: String,
+  //     required: true
+  //   },
+  //   projectName: {
+  //     type: String,
+  //     required: true
+  //   }
+  // },
   methods: {
     submitRequest() {
       // Here you would handle the form submission
+      console.log(this.$route.query.amount);
+      console.log(this.$route.query.projectName);
       console.log("Submitting request...");
       alert('Request submitted!');
     }
