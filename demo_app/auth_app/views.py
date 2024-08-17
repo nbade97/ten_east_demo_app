@@ -94,15 +94,34 @@ def add_contribution(request):
             print("Connecting to PostgreSQL database")
             conn = psycopg2.connect(
                 dbname="postgres",
-                user="nishit",
+                user="postgres",
                 host="localhost"
             )
             cursor = conn.cursor()
             
-            # Insert the data into the contributions table
-            query = sql.SQL("INSERT INTO contributions (user, amount, project_name, timestamp) VALUES (%s, %s, %s, %s)")
-            cursor.execute(query, (user, amount, project_name, datetime.now()))
+            # Insert the data into the userallocation table
+            query = sql.SQL("INSERT INTO userallocation (\"User\", amount, projectname, timecreated) VALUES (%s, %s, %s, %s)")
+            cursor.execute(query, (user, amount, project_name, datetime.datetime.now()))
             conn.commit()
+
+            # Check if the inserted data can be read from the table
+            query = sql.SQL("SELECT * FROM userallocation WHERE \"User\" = %s AND amount = %s AND projectname = %s ORDER BY timecreated DESC LIMIT 1")
+            cursor.execute(query, (user, amount, project_name))
+            result = cursor.fetchone()
+
+            if result:
+                print("Data inserted successfully and verified.")
+            else:
+                print("Data insertion verification failed.")
+
+            # Print the entire userallocation table
+            query = sql.SQL("SELECT * FROM userallocation")
+            cursor.execute(query)
+            all_rows = cursor.fetchall()
+
+            print("Entire userallocation table:")
+            for row in all_rows:
+                print(row)
             
             print(f"Contribution added successfully for user: {user}")
             
