@@ -76,7 +76,6 @@ class LoginViewTests(TestCase):
 		mock_connect.assert_called_once_with(
 			dbname="postgres",
 			user="nishit",
-			password="your_password",
 			host="localhost"
 		)
 		print("Database connection verified")

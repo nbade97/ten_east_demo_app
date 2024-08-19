@@ -26,5 +26,4 @@ COPY --from=build /my-vue-project/dist /usr/share/nginx/html
 EXPOSE 80
 
 # Define the command to run the web server
-# CMD ["nginx", "-g", "daemon off;"]
-CMD ["serve", "-s", "dist"]
+CMD ["nginx", "-g", "daemon off;"]

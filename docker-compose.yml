@@ -9,6 +9,8 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./demo_app/demo_app/db_backup.dump:/docker-entrypoint-initdb.d/db_backup.dump
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
       
 
 
@@ -17,20 +19,21 @@ services:
       context: ./demo_app
       dockerfile: Dockerfile
     volumes:
-      - .:/app
+      - ./demo_app:/app
     ports:
       - "8000:8000"
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgres://myuser:mypassword@db:5432/mydatabase
-
+      DATABASE_URL: postgres://postgres:@db:5432/postgres
   vue:
     build:
       context: ./my-vue-project
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    environment:
+      VUE_APP_API_BASE_URL: http://django:8000
 
 volumes:
   postgres_data:

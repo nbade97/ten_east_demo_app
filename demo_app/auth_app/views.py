@@ -1,3 +1,4 @@
+import datetime
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -76,3 +77,63 @@ def custom_authenticate(username, password):
         print(f"Error authenticating user: {e}")
         return None
     return None
+
+@csrf_exempt
+def add_contribution(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user = data.get('user')
+            amount = data.get('amount')
+            project_name = data.get('project_name')
+            
+            # Log the received data
+            print(f"Received data - User: {user}, Amount: {amount}, Project Name: {project_name}")
+            
+            # Connect to PostgreSQL database
+            print("Connecting to PostgreSQL database")
+            conn = psycopg2.connect(
+                dbname="postgres",
+                user="postgres",
+                host="localhost"
+            )
+            cursor = conn.cursor()
+            
+            # Insert the data into the userallocation table
+            query = sql.SQL("INSERT INTO userallocation (\"User\", amount, projectname, timecreated) VALUES (%s, %s, %s, %s)")
+            cursor.execute(query, (user, amount, project_name, datetime.datetime.now()))
+            conn.commit()
+
+            # Check if the inserted data can be read from the table
+            query = sql.SQL("SELECT * FROM userallocation WHERE \"User\" = %s AND amount = %s AND projectname = %s ORDER BY timecreated DESC LIMIT 1")
+            cursor.execute(query, (user, amount, project_name))
+            result = cursor.fetchone()
+
+            if result:
+                print("Data inserted successfully and verified.")
+            else:
+                print("Data insertion verification failed.")
+
+            # Print the entire userallocation table
+            query = sql.SQL("SELECT * FROM userallocation")
+            cursor.execute(query)
+            all_rows = cursor.fetchall()
+
+            print("Entire userallocation table:")
+            for row in all_rows:
+                print(row)
+            
+            print(f"Contribution added successfully for user: {user}")
+            
+            cursor.close()
+            conn.close()
+            
+            return JsonResponse({'success': True})
+        except json.JSONDecodeError:
+            print("Invalid JSON received")
+            return JsonResponse({'success': False, 'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            print(f"Error adding contribution: {e}")
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    print("Invalid request method")
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)

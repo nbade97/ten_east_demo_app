@@ -26,18 +26,20 @@
 
 <script>
 export default {
-  props: {
-    amount: {
-      type: String,
-      required: true
-    },
-    projectName: {
-      type: String,
-      required: true
-    }
-  },
+  // props: {
+  //   amount: {
+  //     type: String,
+  //     required: true
+  //   },
+  //   projectName: {
+  //     type: String,
+  //     required: true
+  //   }
+  // },
   data() {
     return {
+      amount: this.$route.query.amount,
+      projectName: this.$route.query.projectName,
       statements: [
         { text: 'I acknowledge and agree that allocation requests are accepted or rejected, in whole or in part, at 10 East’s discretion, and that members are not accepted into any 10 East investment unless and until completed and signed subscription documentation is received and countersigned by 10 East.', checked: false },
         { text: 'I acknowledge and agree that 10 East is permitted to, and expects to, call capital in amounts exceeding my approved allocation amount (which will be the commitment amount included on my completed subscription agreement), as set forth in the 10 East investment documentation, including for fees and expenses at the 10 East investing entity level.', checked: false },
@@ -66,7 +68,7 @@ export default {
         console.log(this.amount, this.projectName);
         this.$router.push({ 
           name: 'StepThree',
-          params: { 
+          query: { 
             amount: this.amount,
             projectName: this.projectName
           }

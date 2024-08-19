@@ -12,11 +12,11 @@
           </div>
           <div class="mb-4">
             <h2 class="font-medium text-gray-900">Selected Offering</h2>
-          <p>Project A</p>
+          <p>{{this.$route.query.projectName}}</p>
         </div>
         <div class="mb-4">
           <h2 class="font-medium text-gray-900">Amount Requested</h2>
-          <p>100,000</p>
+          <p>{{formattedAmount}}</p>
         </div>
       </div>
       <div class="flex justify-center mt-8">
@@ -29,25 +29,43 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'RequestSummary',
-  props: {
-    amount: {
-      type: String,
-      required: true
-    },
-    projectName: {
-      type: String,
-      required: true
+  computed: {
+    formattedAmount() {
+      const amount = this.$route.query.amount;
+      if (!amount) return '';
+      return parseFloat(amount).toLocaleString();
     }
   },
   methods: {
-    submitRequest() {
-      // Here you would handle the form submission
-      console.log("Submitting request...");
-      alert('Request submitted!');
+    async submitRequest() {
+      try {
+        let user = "Demo User";
+        let amount = this.$route.query.amount;
+        let project_name = this.$route.query.projectName;
+        let current_time = new Date().toISOString(); // Get the current time in ISO format
+
+        console.log("Submitting request...");
+
+        const response = await axios.post('http://localhost:8000/auth/add_contribution/', {
+          user: user,
+          amount: amount,
+          project_name: project_name,
+          current_time: current_time 
+        });
+
+        console.log('Request submitted successfully:', response.data);
+        alert('Request submitted successfully!');
+      } catch (error) {
+        console.error('Error submitting request:', error);
+        alert('Error submitting request. Please try again.');
+      }
     }
-  }
+  },
+  
 }
 </script>
 <style scoped>
